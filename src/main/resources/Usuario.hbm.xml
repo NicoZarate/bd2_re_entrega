@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="bd2.Muber.model">
+	<class name="Usuario" abstract="true">
+
+		<id name="id_usuario">
+            <column name="id_usuario" />
+            <generator class="hilo" />
+        </id>
+        
+        <property name="nombre">
+            <column name="nombre" />
+        </property>
+        <property name="contrasenia">
+            <column name="contrasenia" />
+        </property>
+        <property name="f_ingreso">
+            <column name="f_ingreso" />
+        </property>
+
+        
+			
+
+
+        <union-subclass name="Conductor">
+
+
+        	<many-to-one name="muber">
+                <column name="id_muber" />
+            </many-to-one>
+
+            <property name="f_licencia">
+        	    <column name="f_licencia" />
+        	</property>
+
+            <set name="viajes" cascade="all" inverse="true" >
+                <key>
+                    <column name="id_conductor"  />
+                </key>
+                 <one-to-many class="Viaje" />
+            </set>
+
+        	
+		</union-subclass>     
+
+		<union-subclass name="Pasajero">
+
+            <many-to-one name="muber">
+                <column name="id_muber" />
+            </many-to-one>
+
+			<property name="credito">
+	            <column name="credito" />
+	        </property>
+
+            <set name="calificaciones" cascade="all" inverse="true" >
+                <key>
+                    <column name="id_pasajero"  />
+                </key>
+                 <one-to-many class="Calificacion" />
+            </set>
+
+            <set name="viajes" table="pasajero_viaje"  cascade="all" inverse="true"  >
+                <key>
+                    <column name="id_pasajero"  />
+                </key>
+                <many-to-many column="id_viaje" class="Viaje" />
+            </set>
+
+
+	        
+	   </union-subclass>
+		
+	</class>
+</hibernate-mapping>

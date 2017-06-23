@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" 
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="bd2.Muber.model">
+	<class name="Viaje">
+
+		<id name="id_viaje">
+            <generator class="native" />
+        </id>
+
+        <property name="max_pasajeros">
+            <column name="max_pasajeros" />
+        </property>
+		<property name="finalizado">
+            <column name="finalizado" />
+        </property>
+		<property name="destino">
+            <column name="destino" />
+        </property>
+        <property name="origen">
+            <column name="origen" />
+        </property>
+		<property name="costo">
+            <column name="costo" />
+        </property>
+		<property name="fecha">
+            <column name="fecha" />
+        </property>
+
+
+        <set name="calificaciones" cascade="all" inverse="false" >
+                <key>
+                    <column name="id_viaje"  />
+                </key>
+                 <one-to-many class="Calificacion" />
+        </set>
+
+        <set name="pasajeros" table="pasajero_viaje"  cascade="all" inverse="false"  >
+             <key>
+                 <column name="id_viaje"  />
+             </key>
+             <many-to-many column="id_pasajero" class="Pasajero" />
+        </set>
+
+        <!--un conductor me hizo-->
+        <many-to-one name="conducido_por">
+            <column name="id_conductor" />
+        </many-to-one>
+
+	</class>
+</hibernate-mapping>

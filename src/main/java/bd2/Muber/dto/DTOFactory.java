@@ -41,9 +41,9 @@ public class DTOFactory{
 		return conductoresdto;
 	}
 	
-	public ConductorDTO crearConductorDTO(Conductor c){
+	public ConductorDTO crearConductorDTO(Conductor c , List<Viaje> viajes){
 		
-		Set<Viaje> viajes = c.getViajes();
+		
         Set<ViajeDTO> viajesdto = new HashSet<ViajeDTO>();
 		
 		for(Viaje v: viajes){
@@ -51,7 +51,6 @@ public class DTOFactory{
 		}
 		ConductorDTO conductordto = new ConductorDTO(c);
 		conductordto.setViajes(viajesdto);
-		conductordto.setPromedio(c.calificacionPromedio());
 		return conductordto;
 	}
 	

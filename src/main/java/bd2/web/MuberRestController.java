@@ -173,8 +173,14 @@ public class MuberRestController {
 								
 		@RequestMapping(value = "/conductores/top10", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 		public String conductoresTop10(){
-			
-			return new Gson().toJson(ServiceLocator.getConductoresService().top10());
+			List<ConductorDTO> conductores = ServiceLocator.getConductoresService().top10();
+			Map<String, Object> aMap = new HashMap<String, Object>();
+			int puesto=1;
+	        for (ConductorDTO elem : conductores) {
+			    	aMap.put( "numero "+puesto ,infoTop10(elem));
+			    	puesto++;
+			}
+			return new Gson().toJson(aMap);
 		}
 		
 		@RequestMapping(value = "/carga", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
@@ -183,7 +189,7 @@ public class MuberRestController {
 		     ServiceLocator.getPasajerosService().cargarBase();
 		     return "carga con exito";
 		}
-	
+		
 		
 		
 		//metodos
@@ -204,7 +210,16 @@ public class MuberRestController {
 			
 			return info;	
 			}
-			
+		
+		
+		protected Map<String, Object> infoTop10(ConductorDTO c){
+			Map<String, Object> info = new HashMap<String, Object>();
+			info.put("Nombre", c.getNombre());
+			info.put("Calificacion promedio", c.getPromedio());
+			return info;	
+			}	
+		
+		
 		protected Map<String, Object> viajeInfo(ViajeDTO v){
 			Map<String, Object> mapViaje = new HashMap<String, Object>();
 			mapViaje.put("max pasajero", v.getMax_pasajeros());

@@ -10,6 +10,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.transaction.annotation.Transactional;
 
 import bd2.Muber.dto.ConductorDTO;
 import bd2.Muber.dto.DTOFactory;
@@ -19,28 +20,15 @@ public class HibernateConductoresRepository extends BaseHibernateRepository impl
 	
 	
 	//lista de conductores
+	//seria asi??
+	@Transactional
 	public List<Conductor> getConductores(){
-		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
-		List<Conductor> conductores= session.createQuery("from Conductor").list();
-		t.commit();
-		endSession(session);
+		List<Conductor> conductores= getCurrentSession().createQuery("from Conductor").list();
 		return conductores;
 	}
 	
 	//retorna conductor buscado por el id
 	
-	public ConductorDTO buscarConductorDTO(Long id){
-		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
-		Query query =session.createQuery("from Conductor WHERE id_usuario = :id");
-		query.setParameter("id", id);
-		Conductor conductor = (Conductor) query.uniqueResult();
-		ConductorDTO conductordto = new DTOFactory().crearConductorDTO(conductor);
-		t.commit();
-		endSession(session);
-		return conductordto;
-	}
 	
 	public Conductor buscarConductor(Long id){
 		Session session = this.getSession();
@@ -48,15 +36,45 @@ public class HibernateConductoresRepository extends BaseHibernateRepository impl
 		Query query =session.createQuery("from Conductor WHERE id_usuario = :id");
 		query.setParameter("id", id);
 		Conductor conductor = (Conductor) query.uniqueResult();
+		conductor.setPromedio(conductor.calificacionPromedio());
 		t.commit();
 		endSession(session);
-		return null;
+		return conductor;
 	}
-
-	public Map<String, Double> getTop10() {
+	public List<Viaje>listaDeViajesDelConductor(Long id){
 		Session session = this.getSession();
 		Transaction t = session.beginTransaction();
-				
+		Query query = session.createQuery("from Viaje where id_conductor = :id");
+		query.setParameter("id", id);
+		List<Viaje> viajes= query.list();
+		t.commit();
+		endSession(session);	
+		return viajes;
+		
+	}
+
+	@Override
+	@Transactional
+	public List<Conductor> getTop10() {
+		// TODO Auto-generated method stub
+		List<Conductor> conductores = getCurrentSession().createQuery("from Conductor c where c not in (select v.conducido_por from Viaje v where v.finalizado = 0)").list();
+		for (Conductor c : conductores){
+			c.setPromedio(c.calificacionPromedio());
+		}
+		conductores.sort((c1, c2) -> new Float(c2.getPromedio()).compareTo((Float)c1.getPromedio()));
+		conductores = conductores.subList(0, Integer.min(conductores.size(), 10));
+		return conductores;
+	}
+	
+	
+	
+	
+	
+  //debo cambiar esto
+	/*public Map<String, Double> getTop10() {
+		Session session = this.getSession();
+		Transaction t = session.beginTransaction();
+		//no considera que sean conductores sin viajes abiertos		
 		List<Object[]> lista = session.createQuery("select avg(ca.puntaje) as promedio, c.nombre as nombre"
 				+ "										from Conductor c, Viaje v, Calificacion ca "
 				+ "										where v.conducido_por = c.id_usuario and"
@@ -79,6 +97,6 @@ public class HibernateConductoresRepository extends BaseHibernateRepository impl
 		endSession(session);
 		return top;
 		}
-	
+	*/
 	
 }

@@ -30,8 +30,8 @@ public class App
     	//put raw y en tipo json
     	
          carga();  //carga de la etapa 1 y 2 
-    	
-         escenariotp2();
+         top10(); //carga apta para el top10 debe cargarse el metodo carga() primero
+        // escenariotp2();
     			
     }
     
@@ -62,7 +62,57 @@ public class App
     	  finalizarViaje(id_viaje);
     	  
     }
-    
+    //para el top10
+    public static void top10(){
+    	//tratar los null pero no es necesario en este caso
+    	
+    	//pasajeros
+    	  Long id_margarita= buscarPasajero("Margarita",solicitarListaDePasajeros()); 
+	      Long id_hugo= buscarPasajero("Hugo",solicitarListaDePasajeros()); 
+	      Long id_german= buscarPasajero("German",solicitarListaDePasajeros()); 
+	      Long id_alicia= buscarPasajero("Alicia",solicitarListaDePasajeros());
+	      
+	      //viajes con coductores que ya estan en la base habiando usado la carga()
+	      Long id_viaje2 = solicitarALtaDeViaje("Chascomus","Cordoba","Carla",100,2);	
+	      Long id_viaje3 = solicitarALtaDeViaje("Rosario","Cordoba","Patricio",100,2);	
+	      Long id_viaje4 = solicitarALtaDeViaje("La Plata","Cordoba","Juan",100,2);	
+	      Long id_viaje5 = solicitarALtaDeViaje("Moron","Cordoba","Pablo",100,2);	
+	     
+	      //se agregan a los viajes
+	      agregarPasajeroAViaje(id_margarita,id_viaje2);
+    	  agregarPasajeroAViaje(id_hugo,id_viaje2);
+    	  
+    	  agregarPasajeroAViaje(id_margarita,id_viaje3);
+    	  agregarPasajeroAViaje(id_alicia,id_viaje3);
+    	  
+    	  agregarPasajeroAViaje(id_german,id_viaje4);
+    	  
+    	  agregarPasajeroAViaje(id_alicia,id_viaje5);
+    	  
+    	  
+    	  //calificar
+	      calificarViaje(id_hugo, id_viaje2,"bien", 5 );
+	      calificarViaje(id_margarita, id_viaje2,"bien", 5 );
+	      
+	      calificarViaje(id_alicia, id_viaje3,"bien", 2 );
+	      calificarViaje(id_margarita, id_viaje3,"bien", 3 );
+	      
+	      calificarViaje(id_german, id_viaje4,"bien", 4 );
+	      
+	      calificarViaje(id_alicia, id_viaje5,"bien", 2 );
+	     
+	      
+	      
+	      //finalizar
+    	  finalizarViaje(id_viaje2);
+    	  finalizarViaje(id_viaje3);
+    	  finalizarViaje(id_viaje4);
+    	  finalizarViaje(id_viaje5);
+    	  
+    	  
+    	
+    	
+    }
     
     
     //finalizar el viaje
@@ -182,7 +232,7 @@ public class App
 	   
     }
    
-    
+   
     
   //buca por nombre un pasajero
     private static long buscarPasajero(String name, JSONObject pasajeros) {

@@ -17,10 +17,11 @@ public class ConductoresServiceImpl extends BaseServiceImpl implements Conductor
 	}
 	
 	public ConductorDTO buscarConductor(Long id){
-		return conductoresRepository.buscarConductorDTO(id);
+		 return this.dtoFactory.crearConductorDTO(conductoresRepository.buscarConductor(id),conductoresRepository.listaDeViajesDelConductor(id));
+		  
 	}
 
-	public Map<String, Double> top10() {
-		return conductoresRepository.getTop10();
+	public List<ConductorDTO> top10() {
+		return this.dtoFactory.crearConductoresDTO(conductoresRepository.getTop10());
 	}
 }

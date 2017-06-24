@@ -28,6 +28,7 @@ public class ConductorDTO extends UsuarioDTO {
 		this.setContrasenia(c.getContrasenia());
 		this.setF_ingreso(c.getF_ingreso());
 		this.setF_licencia(c.getF_licencia());
+		this.setPromedio(c.getPromedio());
     
     }
   

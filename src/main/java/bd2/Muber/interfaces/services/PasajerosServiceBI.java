@@ -15,4 +15,6 @@ public interface PasajerosServiceBI extends BaseServiceBI{
 	
 	public String calificarViaje(Long id_viaje, Long id_pasajero, int puntaje, String comentario);
 
+	
+
 }

@@ -7,11 +7,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import bd2.Muber.model.*;
 
 public class BaseHibernateRepository{
-	
+    @Autowired
 	protected SessionFactory sessionFactory;
 	
 	public SessionFactory getSessionFactory() {
@@ -21,7 +23,14 @@ public class BaseHibernateRepository{
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-
+	
+	protected final Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+		
+	}
+	
+	
+    ////esto no iria???
 	public Session getSession() {
 		SessionFactory factory = sessionFactory;
 		Session session = factory.openSession();
@@ -33,6 +42,8 @@ public class BaseHibernateRepository{
        	session.disconnect();
     	session.close();
    }
+	
+	///
 	public void cargarBase(){
 		Session session = this.getSession();
 		Transaction t = session.beginTransaction();
@@ -44,7 +55,7 @@ public class BaseHibernateRepository{
 		roberto.registrarViaje("Moron","La Plata", 1, 12900);
 	
 		Pasajero german = new Pasajero("German", "g", 1500, muber);
-		Pasajero alicia = new Pasajero("Alicias", "a", 1500, muber );
+		Pasajero alicia = new Pasajero("Alicia", "a", 1500, muber );
 		Pasajero margarita = new Pasajero("Margarita", "m", 1500, muber);
 		Pasajero hugo = new Pasajero("Hugo", "h", 2300, muber);
 		german.agregarse(viaje);
@@ -56,13 +67,20 @@ public class BaseHibernateRepository{
 		margarita.calificar(4, "bien", viaje);
 		
 		roberto.finalizar(viaje);
-	
+		
+		
+        //otros conductores
+		 new Conductor("Carla","1234",new GregorianCalendar(2020, 2, 20).getTime(), muber);
+		 new Conductor("Patricio","1234",new GregorianCalendar(2020, 2, 20).getTime(), muber);
+		 new Conductor("Juan","1234",new GregorianCalendar(2020, 2, 20).getTime(), muber);
+		 new Conductor("Pablo","1234",new GregorianCalendar(2020, 2, 20).getTime(), muber);
+		
 		session.save(muber);
 		t.commit();
 		endSession(session);
 	}
 	
-	
+
 	
 	
 }

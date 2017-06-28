@@ -40,8 +40,7 @@ import java.util.List;
 @EnableWebMvc
 public class MuberRestController {
 
-	
-	//listar todos los pasajeros
+	//lista de pasajeros
 	@RequestMapping(value = "/pasajeros", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 	public String listarPasajeros() {
 		
@@ -69,8 +68,11 @@ public class MuberRestController {
 		
 		//listar todos los datos del conductor
 		@RequestMapping(value = "/conductores/detalle/{conductorId}", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
-		public String infoConductor(@PathVariable("conductorId") long id_conductor) {
+		public String infoConductor(@PathVariable("conductorId") Long id_conductor) {
 			try{ 
+				if(id_conductor == null){
+			    	return "no puso id";
+			    }
 				ConductorDTO c = ServiceLocator.getConductoresService().buscarConductor(id_conductor);
 				return new Gson().toJson(this.mostrarInformacion(c) );
 			 } catch(NullPointerException e)
@@ -105,8 +107,11 @@ public class MuberRestController {
 				@RequestParam("origen") String  origen,
 				@RequestParam("destino") String  destino,
 				@RequestParam("conductorId") Long  conductorId,
-				@RequestParam("costoTotal") float  costoTotal,
-				@RequestParam("cantidadPasajeros") int  cantidadPasajeros){
+				@RequestParam("costoTotal") Float  costoTotal,
+				@RequestParam("cantidadPasajeros") Integer  cantidadPasajeros){
+			   if(origen == ""|| destino == "" || conductorId == null || costoTotal == null || cantidadPasajeros == null){
+			    	return new Long(-1);
+			    }
 			    ConductorDTO conductor = ServiceLocator.getConductoresService().buscarConductor(conductorId);
 			    if(conductor == null){
 			    	return new Long(0);
@@ -114,7 +119,8 @@ public class MuberRestController {
 				Long id = ServiceLocator.getViajesService().cargarViaje(origen, destino, cantidadPasajeros, costoTotal, conductorId);
 				
 				return id ;
-				
+			
+			
 			
 	    }
 		//curl -X PUT -d "viajeId=4" http://localhost:8080/MuberRESTful/rest/services/viajes/finalizar -G
@@ -122,7 +128,9 @@ public class MuberRestController {
 		
 		@RequestMapping(value = "/viajes/finalizar", method = RequestMethod.PUT, produces = "application/json", headers = "Accept=application/json")
 		public String finalizarViaje(@RequestParam("viajeId") Long idViaje){
-					    
+				if(idViaje == null){
+			    	return "No puso el viajeId en la petición";
+			    }	    
 			      return ServiceLocator.getViajesService().finalizarViaje(idViaje);
 					
 			    }
@@ -136,7 +144,9 @@ public class MuberRestController {
 		public String agregarCredito(
 				@RequestParam("monto") Long monto,
 				@RequestParam("pasajeroId") Long idPasajero){
-						
+			    if(idPasajero == null || monto == null ){
+		           	return "No introdujo algun dato";
+		        }	
 				  return ServiceLocator.getPasajerosService().agregarCredito(idPasajero,monto);
 					
 				}
@@ -149,6 +159,9 @@ public class MuberRestController {
 		public String agregarPasajeroAViaje(
 						@RequestParam("viajeId") Long idViaje,
 						@RequestParam("pasajeroId") Long idPasajero) {
+						if(idPasajero == null || idViaje == null ){
+				           	return "No introdujo algun dato";
+				        }
 						
 					   	return ServiceLocator.getPasajerosService().agregarPasajeroAViaje(idViaje,idPasajero);
 					    //LOS STRING EN PRINCIO ESTA ESCRITOS EN LOS MODELOS AHI ES DONDE VALIDAMOS TODO				
@@ -163,13 +176,15 @@ public class MuberRestController {
 		public String agregarCalificacion(
 			@RequestParam("viajeId") Long id_viaje,
 			@RequestParam("pasajeroId") Long id_pasajero,
-         	@RequestParam("puntaje") int puntaje,
+         	@RequestParam("puntaje") Integer puntaje,
             @RequestParam("comentario") String comentario){
-			
+			if(id_pasajero == null || id_viaje == null || puntaje == null || comentario == ""){
+	           	return "No introdujo algun dato";
+	        }
 			return ServiceLocator.getPasajerosService().calificarViaje(id_viaje, id_pasajero, puntaje, comentario);						
 
 	    }
-		
+			
 								
 		@RequestMapping(value = "/conductores/top10", method = RequestMethod.GET, produces = "application/json", headers = "Accept=application/json")
 		public String conductoresTop10(){

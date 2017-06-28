@@ -12,9 +12,7 @@ public class HibernateCalificacionesRepository extends BaseHibernateRepository i
 	//lista de calificaiones
 	public List<Calificacion> getCalificaciones(){
 		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
 		List<Calificacion> calificaciones= session.createQuery("from Calificacion").list();
-		t.commit();
 		endSession(session);
 		return calificaciones;
 	}

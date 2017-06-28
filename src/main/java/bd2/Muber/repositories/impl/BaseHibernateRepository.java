@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import bd2.Muber.model.*;
 
 public class BaseHibernateRepository{
-    @Autowired
+    
 	protected SessionFactory sessionFactory;
 	
 	public SessionFactory getSessionFactory() {
@@ -24,10 +24,6 @@ public class BaseHibernateRepository{
 		this.sessionFactory = sessionFactory;
 	}
 	
-	protected final Session getCurrentSession() {
-		return sessionFactory.getCurrentSession();
-		
-	}
 	
 	
     ////esto no iria???
@@ -46,7 +42,7 @@ public class BaseHibernateRepository{
 	///
 	public void cargarBase(){
 		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
+		
 		Muber muber= new Muber();
 		Conductor roberto = new Conductor("Roberto","1234",new GregorianCalendar(2020, 2, 20).getTime(), muber);
 		Viaje viaje = roberto.registrarViaje("La Plata","Tres Arroyos", 4, 900);
@@ -76,7 +72,7 @@ public class BaseHibernateRepository{
 		 new Conductor("Pablo","1234",new GregorianCalendar(2020, 2, 20).getTime(), muber);
 		
 		session.save(muber);
-		t.commit();
+	
 		endSession(session);
 	}
 	

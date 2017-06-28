@@ -15,9 +15,7 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 	//lista los pasajeros
 	public List<Pasajero> getPasajeros(){
 		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
 		List<Pasajero> pasajeros= session.createQuery("from Pasajero").list();
-		t.rollback();
 		endSession(session);
 		return pasajeros;
 	}
@@ -25,11 +23,10 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 	//retorna pasajero buscado por el id
 	public Pasajero buscarPasajero(Long id){
 		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
 		Query query =session.createQuery("from Pasajero WHERE id_usuario = :id");
 		query.setParameter("id", id);
 		Pasajero pasajero = (Pasajero) query.uniqueResult();
-		t.commit();
+		
 		endSession(session);
 		return pasajero;
 	}
@@ -37,7 +34,6 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 	@Override
 	public String agregarCredito(Long idPasajero, Long monto) {
 		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
 		Query query =session.createQuery("from Pasajero WHERE id_usuario = :id");
 		query.setParameter("id", idPasajero);
 		Pasajero pasajero = (Pasajero) query.uniqueResult();
@@ -45,7 +41,7 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 			return "no se encotro al pasajero con ese id";
 		}
 		pasajero.cargarCredito(monto);
-		t.commit();
+		
 		endSession(session);
 		return "Se cargo saldo con exito a "+ pasajero.getNombre();
 	}
@@ -53,7 +49,6 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 	@Override
 	public String agregarPasajeroAViaje(Long idViaje, Long idPasajero) {
 		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
 		Query query =session.createQuery("from Viaje WHERE id_viaje = :id");
 		query.setParameter("id", idViaje);
 		Viaje viaje = (Viaje) query.uniqueResult();
@@ -63,7 +58,7 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		Pasajero pasajero = (Pasajero) query.uniqueResult();
 		if(pasajero == null ){return "pasajero no existe con ese id";}
 		String s = pasajero.agregarse(viaje);
-		t.commit();
+		
 		endSession(session);
 		return s;
 	}
@@ -93,7 +88,7 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 				 mensaje="No se pudo calificar";
 			 }
 		 }
-		 t.commit();
+		 
 		 endSession(session);
 		 return mensaje;
 	 }

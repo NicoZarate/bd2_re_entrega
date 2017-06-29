@@ -42,7 +42,7 @@ public class BaseHibernateRepository{
 	///
 	public void cargarBase(){
 		Session session = this.getSession();
-		
+		Transaction t = session.beginTransaction();
 		Muber muber= new Muber();
 		Conductor roberto = new Conductor("Roberto","1234",new GregorianCalendar(2020, 2, 20).getTime(), muber);
 		Viaje viaje = roberto.registrarViaje("La Plata","Tres Arroyos", 4, 900);
@@ -72,7 +72,7 @@ public class BaseHibernateRepository{
 		 new Conductor("Pablo","1234",new GregorianCalendar(2020, 2, 20).getTime(), muber);
 		
 		session.save(muber);
-	
+		t.commit();
 		endSession(session);
 	}
 	

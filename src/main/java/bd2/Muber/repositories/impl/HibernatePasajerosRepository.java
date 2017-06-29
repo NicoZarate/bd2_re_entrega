@@ -26,12 +26,11 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		Query query =session.createQuery("from Pasajero WHERE id_usuario = :id");
 		query.setParameter("id", id);
 		Pasajero pasajero = (Pasajero) query.uniqueResult();
-		
 		endSession(session);
 		return pasajero;
 	}
 
-	@Override
+	
 	public String agregarCredito(Long idPasajero, Long monto) {
 		Session session = this.getSession();
 		Query query =session.createQuery("from Pasajero WHERE id_usuario = :id");
@@ -40,15 +39,21 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		if(pasajero == null){
 			return "no se encotro al pasajero con ese id";
 		}
-		pasajero.cargarCredito(monto);
 		
+		pasajero.cargarCredito(monto);
+		Query query2 = session.createQuery("update Pasajero set credito = :total" +
+				" where id_usuario = :id");
+        query2.setParameter("total", pasajero.getCredito());
+        query2.setParameter("id", idPasajero);
+        query2.executeUpdate();
 		endSession(session);
 		return "Se cargo saldo con exito a "+ pasajero.getNombre();
 	}
 
-	@Override
+	// esta es la mas complicada de ver porque se tiene que cargar una tabla pibot
 	public String agregarPasajeroAViaje(Long idViaje, Long idPasajero) {
 		Session session = this.getSession();
+		Transaction t = session.beginTransaction();
 		Query query =session.createQuery("from Viaje WHERE id_viaje = :id");
 		query.setParameter("id", idViaje);
 		Viaje viaje = (Viaje) query.uniqueResult();
@@ -58,11 +63,11 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		Pasajero pasajero = (Pasajero) query.uniqueResult();
 		if(pasajero == null ){return "pasajero no existe con ese id";}
 		String s = pasajero.agregarse(viaje);
-		
+		t.commit();
 		endSession(session);
 		return s;
 	}
-	
+	// se puede hacer un save de calificacion mirar el metodo calificar que retorna
 	 public String calificarViaje(Long id_viaje, Long id_pasajero, int puntaje, String comentario){
 		 String mensaje;
 		 Session session = this.getSession();
@@ -88,7 +93,7 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 				 mensaje="No se pudo calificar";
 			 }
 		 }
-		 
+		 t.commit();
 		 endSession(session);
 		 return mensaje;
 	 }

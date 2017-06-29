@@ -112,14 +112,14 @@ public class MuberRestController {
 			   if(origen == ""|| destino == "" || conductorId == null || costoTotal == null || cantidadPasajeros == null){
 			    	return new Long(-1);
 			    }
-			    ConductorDTO conductor = ServiceLocator.getConductoresService().buscarConductor(conductorId);
-			    if(conductor == null){
-			    	return new Long(0);
-			    }
-				Long id = ServiceLocator.getViajesService().cargarViaje(origen, destino, cantidadPasajeros, costoTotal, conductorId);
-				
-				return id ;
-			
+			   try{ 
+			        ConductorDTO conductor = ServiceLocator.getConductoresService().buscarConductor(conductorId);
+			        Long id = ServiceLocator.getViajesService().cargarViaje(origen, destino, cantidadPasajeros, costoTotal, conductorId);
+				    return id ;
+			   } catch(NullPointerException e)
+	            {
+				   return new Long(-1);
+	            } 
 			
 			
 	    }

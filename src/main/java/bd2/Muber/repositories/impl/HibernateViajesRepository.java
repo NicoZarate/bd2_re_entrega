@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.transaction.annotation.Transactional;
 
 import bd2.Muber.interfaces.repositories.ViajesRepositoryBI;
 import bd2.Muber.model.*;
@@ -21,9 +22,7 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 	//lista viajes abiertos
 	public List<Viaje> getViajesAbiertos(){
 		Session session = this.getSession();
-
-		List<Viaje> viajes= session.createQuery("from Viaje WHERE finalizado = 0").list();
-		
+        List<Viaje> viajes= session.createQuery("from Viaje WHERE finalizado = 0").list();
 		endSession(session);
 		return viajes;
 	}
@@ -31,25 +30,23 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 	
 	public Viaje buscarViaje(Long id){
 		Session session = this.getSession();
-
-		Query query =session.createQuery("from Viaje WHERE id_viaje = :id");
+        Query query =session.createQuery("from Viaje WHERE id_viaje = :id");
 		query.setParameter("id", id);
 		Viaje viaje = (Viaje) query.uniqueResult();
-		
 		endSession(session);
 		return viaje;
 	}
 	
 	// crea un viaje
+	
 	public Long cargarViaje(String origen,String destino , float costoTotal ,int cantidadPasajeros,long conductorId){
 		try{
 		    Session session = this.getSession();
-	
 			Query query =session.createQuery("from Conductor WHERE id_usuario = :id");
 			query.setParameter("id", conductorId);
 			Conductor conductor = (Conductor) query.uniqueResult();
 			Viaje v =conductor.registrarViaje(origen, destino, cantidadPasajeros, costoTotal);
-			
+			session.save(v);
 			endSession(session);
 			return v.getId_viaje();
 	    	}catch(Exception e){
@@ -60,11 +57,13 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 		
 		
 	}
+	
+	//falta ver sin la transaccion
 	 public String finalizarViaje(Long idViaje)
 	 {
 			Session session = this.getSession();
-	
-			Query query =session.createQuery("from Viaje WHERE id_viaje = :id");
+			Transaction t = session.beginTransaction();
+	        Query query =session.createQuery("from Viaje WHERE id_viaje = :id");
 			query.setParameter("id", idViaje);
 			Viaje viaje = (Viaje) query.uniqueResult();
 			if(viaje == null){
@@ -72,7 +71,7 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 			}
 			
 			String s = viaje.finalizar();
-			
+			t.commit();
 			endSession(session);
 			return s;
 	}

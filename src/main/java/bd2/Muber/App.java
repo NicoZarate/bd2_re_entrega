@@ -30,8 +30,8 @@ public class App
     	//put raw y en tipo json
     	
          carga();  //carga de la etapa 1 y 2 
-         top10(); //carga apta para el top10 debe cargarse el metodo carga() primero
-        // escenariotp2();
+        // top10(); //carga apta para el top10 debe cargarse el metodo carga() primero
+         escenariotp2();
     			
     }
     
@@ -72,7 +72,8 @@ public class App
 	      Long id_german= buscarPasajero("German",solicitarListaDePasajeros()); 
 	      Long id_alicia= buscarPasajero("Alicia",solicitarListaDePasajeros());
 	      
-	      //viajes con coductores que ya estan en la base habiando usado la carga()
+	      //viajes con coductores que ya estan en la base 
+         
 	      Long id_viaje2 = solicitarALtaDeViaje("Chascomus","Cordoba","Carla",100,2);	
 	      Long id_viaje3 = solicitarALtaDeViaje("Rosario","Cordoba","Patricio",100,2);	
 	      Long id_viaje4 = solicitarALtaDeViaje("La Plata","Cordoba","Juan",100,2);	
@@ -229,6 +230,7 @@ public class App
 		HttpEntity<String> entity = new HttpEntity<String>("", headers);
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 		System.out.println(response.getBody());
+		//top10();
 	   
     }
    

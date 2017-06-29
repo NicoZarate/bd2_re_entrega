@@ -31,6 +31,7 @@ public class Pasajero extends Usuario {
 	//un pasajero se agrega al viaje que desea 
 	
 	public String agregarse(Viaje viaje) {
+		String aux=null;
 		if(viaje == null){
 			return"el viaje no existe";
 		}else if(!viaje.getFinalizado()){
@@ -38,11 +39,14 @@ public class Pasajero extends Usuario {
 			if(!this.getViajes().add(viaje)){
 			     return "Ya esta agregado en este viaje " + this.getNombre();
 			}else{
-		        viaje.agregarPasajero(this);
+		       aux=viaje.agregarPasajero(this);
 			}
 		  }else{
 			return "viaje finalizado";
 		 }
+		if(aux!= ""){
+			return aux;
+		}
 		return "Se ha agregado correctamente a "+ this.getNombre();
 	}
 	

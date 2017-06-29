@@ -36,12 +36,13 @@ public class Viaje {
 	
 	
 
-	public void agregarPasajero(Pasajero pasajero) {
+	public String agregarPasajero(Pasajero pasajero) {
 		if (this.pasajeros.size()< this.max_pasajeros){
 			this.pasajeros.add(pasajero);
 			pasajero.getViajes().add(this);
+			return "";
 		}else{
-			System.out.println("No puede agregarse al viaje, ya se supero la cantidad maxima");
+			return "No puede agregarse al viaje, ya se supero la cantidad maxima";
 		}
 		
 	}

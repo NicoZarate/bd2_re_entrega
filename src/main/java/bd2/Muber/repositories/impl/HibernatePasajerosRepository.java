@@ -76,21 +76,25 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		 conseguirViaje.setParameter("id", id_viaje);
 		 Viaje viaje = (Viaje) conseguirViaje.uniqueResult();
 		 if (viaje == null){
-			 mensaje="El viaje no existe";
+			 return "El viaje no existe";
 		 }
 		 Query conseguirPasajero = session.createQuery("from Pasajero where id_usuario = :id");
 		 conseguirPasajero.setParameter("id", id_pasajero);
+		 
+		//  Query c = session.createQuery("Select Viaje from Pasajero , Viaje as v Where Pasajero.viajes = Viaje and Pasajero.id_usuario = 4");
+		  //List<Viaje> v = c.list();
+		 
 		 Pasajero pasajero = (Pasajero) conseguirPasajero.uniqueResult();
 		 if (pasajero == null){
-			 mensaje="El id del pasajero no existe";
+			 return "El id del pasajero no existe";
 		 }
 		 else{
-			 Calificacion res = pasajero.calificar(puntaje, comentario, viaje);
-			 if (res != null){
+			 String res = pasajero.calificar(puntaje, comentario, viaje);
+			 if (res == ""){
 				 mensaje="Se califico correctamente";
 			 }
 			 else{
-				 mensaje="No se pudo calificar";
+				 mensaje= res;
 			 }
 		 }
 		 t.commit();

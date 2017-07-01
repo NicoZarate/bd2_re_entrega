@@ -52,24 +52,22 @@ public class Pasajero extends Usuario {
 	
 	//un pasajero califica un viaje
 	
-	public Calificacion calificar(int puntaje, String comentario, Viaje viaje) {
-		if(viaje != null ){
+	public String calificar(int puntaje, String comentario, Viaje viaje) {
+		
 			 if(!yaCalifico(viaje)&& perteneceAlViaje(viaje)){
 					if(1 <= puntaje && puntaje <=5){
 						Calificacion calif= new Calificacion(puntaje, comentario, this, viaje);
 						this.getCalificaciones().add(calif);
 						viaje.agregarCalificacion(calif);
-					    return calif;
+					    return "";
 					}else{
-						System.out.println("El valor es incorrecto , debe ser entre 1 a 5");
+						return "El valor es incorrecto , debe ser entre 1 a 5";
 					}
 			 }else{
-				 System.out.println("Ya califico este viaje o no pertenece al viaje " + this.getNombre() );
+				      return "Ya califico este viaje o no pertenece al viaje " + this.getNombre();
 			 }
-		}else{
-			System.out.println("el viaje no existe");
-		}
-		return null;
+		
+		
 	}
 	
 	

@@ -8,7 +8,7 @@ import bd2.Muber.model.Viaje;
 public class ConductorDTO extends UsuarioDTO {
 	
 	private Date f_licencia;
-	private float promedio;
+	private Double promedio;
     private Set<ViajeDTO> viajes;
   
 	public ConductorDTO(){
@@ -54,11 +54,11 @@ public class ConductorDTO extends UsuarioDTO {
 			this.viajes = viajes;
 		}
 
-		public float getPromedio() {
+		public Double getPromedio() {
 			return promedio;
 		}
 
-		public void setPromedio(float promedio) {
+		public void setPromedio(Double promedio) {
 			this.promedio = promedio;
 		}
 

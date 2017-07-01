@@ -38,7 +38,7 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 	}
 	
 	// crea un viaje
-	
+	///verificar que retorna registrar viaje
 	public Long cargarViaje(String origen,String destino , float costoTotal ,int cantidadPasajeros,long conductorId){
 		try{
 		    Session session = this.getSession();
@@ -71,7 +71,7 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 			}
 			
 			String s = viaje.finalizar();
-			t.commit();
+		    t.commit();
 			endSession(session);
 			return s;
 	}

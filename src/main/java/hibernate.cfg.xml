@@ -15,14 +15,7 @@ http://www.springframework.org/schema/tx/spring-tx-3.1.xsd ">
 		</property>
 
 		<property name="mappingResources">
-			<list>
-<!--
-				Agregar aca los archivos de mapeo, por ejemplo: 			
-				 <value>bd2/Muber/model/Usuario.hbm.xml</value>
-               <value>bd2/Muber/model/Muber.hbm.xml</value>
-               <value>bd2/Muber/model/Calificacion.hbm.xml</value>
-               <value>bd2/Muber/model/Viaje.hbm.xml</value>
- -->            
+			<list>         
                <value>bd2/Muber/model/Usuario.hbm.xml</value>
                <value>bd2/Muber/model/Muber.hbm.xml</value>
                <value>bd2/Muber/model/Calificacion.hbm.xml</value>

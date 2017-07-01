@@ -7,7 +7,7 @@ import java.util.Set;
 public class Conductor extends Usuario {
 	private Set<Viaje> viajes;
 	private Date f_licencia;
-	private float promedio;
+	private Double promedio;
 	private Muber muber;
 
     public Conductor(){
@@ -132,11 +132,11 @@ public class Conductor extends Usuario {
 		this.muber = muber;
 	}
 	
-	public float getPromedio() {
+	public Double getPromedio() {
 		return promedio;
 	}
 
-	public void setPromedio(float promedio) {
+	public void setPromedio(Double promedio) {
 		this.promedio = promedio;
 	}
 

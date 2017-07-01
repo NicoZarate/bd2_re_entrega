@@ -164,7 +164,7 @@ public class MuberRestController {
 				        }
 						
 					   	return ServiceLocator.getPasajerosService().agregarPasajeroAViaje(idViaje,idPasajero);
-					    //LOS STRING EN PRINCIO ESTA ESCRITOS EN LOS MODELOS AHI ES DONDE VALIDAMOS TODO				
+									
 
 			    }
 		
@@ -192,8 +192,10 @@ public class MuberRestController {
 			Map<String, Object> aMap = new HashMap<String, Object>();
 			int puesto=1;
 	        for (ConductorDTO elem : conductores) {
+	        	if(elem.getPromedio()!= 0.0){
 			    	aMap.put( "numero "+puesto ,infoTop10(elem));
 			    	puesto++;
+	        	}
 			}
 			return new Gson().toJson(aMap);
 		}

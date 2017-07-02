@@ -46,9 +46,14 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 			query.setParameter("id", conductorId);
 			Conductor conductor = (Conductor) query.uniqueResult();
 			Viaje v =conductor.registrarViaje(origen, destino, cantidadPasajeros, costoTotal);
-			session.save(v);
+			if(v !=null){
+				session.save("Viaje",v);
+				session.flush();
+				return v.getId_viaje();
+			}
+			session.flush();
 			endSession(session);
-			return v.getId_viaje();
+			return null;
 	    	}catch(Exception e){
 			
 			   return null;
@@ -62,7 +67,7 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 	 public String finalizarViaje(Long idViaje)
 	 {
 			Session session = this.getSession();
-			Transaction t = session.beginTransaction();
+			//Transaction t = session.beginTransaction();
 	        Query query =session.createQuery("from Viaje WHERE id_viaje = :id");
 			query.setParameter("id", idViaje);
 			Viaje viaje = (Viaje) query.uniqueResult();
@@ -71,7 +76,8 @@ public class HibernateViajesRepository extends BaseHibernateRepository implement
 			}
 			
 			String s = viaje.finalizar();
-		    t.commit();
+			session.save("Viaje",viaje);
+			session.flush();
 			endSession(session);
 			return s;
 	}

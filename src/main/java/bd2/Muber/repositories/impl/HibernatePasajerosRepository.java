@@ -50,10 +50,9 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		return "Se cargo saldo con exito a "+ pasajero.getNombre();
 	}
 
-	// esta es la mas complicada de ver porque se tiene que cargar una tabla pibot
+	
 	public String agregarPasajeroAViaje(Long idViaje, Long idPasajero) {
 		Session session = this.getSession();
-		Transaction t = session.beginTransaction();
 		Query query =session.createQuery("from Viaje WHERE id_viaje = :id");
 		query.setParameter("id", idViaje);
 		Viaje viaje = (Viaje) query.uniqueResult();
@@ -63,7 +62,8 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		Pasajero pasajero = (Pasajero) query.uniqueResult();
 		if(pasajero == null ){return "pasajero no existe con ese id";}
 		String s = pasajero.agregarse(viaje);
-		t.commit();
+		session.save("Pasajero",pasajero);
+		session.flush();
 		endSession(session);
 		return s;
 	}
@@ -71,7 +71,6 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 	 public String calificarViaje(Long id_viaje, Long id_pasajero, int puntaje, String comentario){
 		 String mensaje;
 		 Session session = this.getSession();
-		 Transaction t = session.beginTransaction();
 		 Query conseguirViaje = session.createQuery("from Viaje where id_viaje = :id");
 		 conseguirViaje.setParameter("id", id_viaje);
 		 Viaje viaje = (Viaje) conseguirViaje.uniqueResult();
@@ -81,8 +80,6 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 		 Query conseguirPasajero = session.createQuery("from Pasajero where id_usuario = :id");
 		 conseguirPasajero.setParameter("id", id_pasajero);
 		 
-		//  Query c = session.createQuery("Select Viaje from Pasajero , Viaje as v Where Pasajero.viajes = Viaje and Pasajero.id_usuario = 4");
-		  //List<Viaje> v = c.list();
 		 
 		 Pasajero pasajero = (Pasajero) conseguirPasajero.uniqueResult();
 		 if (pasajero == null){
@@ -97,7 +94,8 @@ public class HibernatePasajerosRepository extends BaseHibernateRepository implem
 				 mensaje= res;
 			 }
 		 }
-		 t.commit();
+		 session.save("Pasajero",pasajero);
+		 session.flush();
 		 endSession(session);
 		 return mensaje;
 	 }

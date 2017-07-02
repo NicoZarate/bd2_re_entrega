@@ -115,7 +115,10 @@ public class MuberRestController {
 			   try{ 
 			        ConductorDTO conductor = ServiceLocator.getConductoresService().buscarConductor(conductorId);
 			        Long id = ServiceLocator.getViajesService().cargarViaje(origen, destino, cantidadPasajeros, costoTotal, conductorId);
-				    return id ;
+			        if(id != null){
+				       return id ;
+			        }
+			        return new Long(-1);
 			   } catch(NullPointerException e)
 	            {
 				   return new Long(-1);

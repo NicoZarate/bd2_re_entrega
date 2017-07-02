@@ -30,7 +30,7 @@ public class App
     	//put raw y en tipo json
     	
          carga();  //carga de la etapa 1 y 2 y datos para top10
-      //   escenariotp2();
+         //escenariotp2();
     			
     }
     
@@ -229,7 +229,7 @@ public class App
 		HttpEntity<String> entity = new HttpEntity<String>("", headers);
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 		System.out.println(response.getBody());
-		//top10();
+		top10();
 	   
     }
    

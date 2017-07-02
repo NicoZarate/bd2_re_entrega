@@ -42,7 +42,7 @@ public class Pasajero extends Usuario {
 		       aux=viaje.agregarPasajero(this);
 			}
 		  }else{
-			return "viaje finalizado";
+			return "viaje esta finalizado";
 		 }
 		if(aux!= ""){
 			return aux;
